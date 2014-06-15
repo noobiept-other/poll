@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+
+<h2>{{ poll.title }}</h2>
+
+<p>
+    {{ poll.date_created }} | ({{ poll.date_created|naturaltime }})
+</p>
+
+<table>
+    <tr>
+        <th>Option</th>
+        <th>Votes count</th>
+    </tr>
+
+    {% for option in poll.option_set.all %}
+        <tr>
+            <td>{{ option.text }}</td>
+            <td>{{ option.votes_count }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Available polls</h2>
+
+{% if polls %}
+    <table>
+        <tr>
+            <th>title</th>
+            <th>total votes</th>
+        </tr>
+
+    {% for poll in polls %}
+        <tr>
+            <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
+            <td>{{ poll.get_total_votes }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>
+       No polls available.
+    </p>
+{% endif %}
+
+{% endblock %}

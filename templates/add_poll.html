@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Add poll</h2>
+
+{% if errors %}
+    <ul>
+    {% for error in errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+<form method="post" action="{% url 'add_poll' %}">
+    {% csrf_token %}
+
+    <label for="title">title</label>
+    <input type="text" name="title" placeholder="title" />
+
+    {% for position in initialOptions %}
+        <label for="option{{ position }}">{{ position }}</label>
+        <input type="text" name="option{{ position }}" placeholder="option" />
+    {% endfor %}
+
+    <input type="submit" value="add" />
+</form>
+
+{% endblock %}
