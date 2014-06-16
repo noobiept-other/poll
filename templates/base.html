@@ -5,7 +5,9 @@
 <head>
     <title>Poll</title>
 
-    <script type="text/javascript" src="{% static "main.js" %}"></script>
+    {% block scripts %}{% endblock %}
+
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
 </head>
 <body>
 
