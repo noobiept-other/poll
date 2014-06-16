@@ -3,7 +3,7 @@ from django.http import Http404, HttpResponseRedirect
 
 import re
 
-from poll.models import Poll
+from poll.models import Poll, Option
 
 def home( request ):
 
@@ -27,24 +27,16 @@ def add_poll( request ):
             errors.append( 'Need to add a title.' )
 
         else:
-            position = 1
             count = 0
             options = []
 
-                #HERE you can have like option1 and option3 but not option2
-            while True:
-                optionId = 'option{}'.format( position )
+            for key, value in request.POST.iteritems():
 
-                option = request.POST.get( optionId, '' )
+                if key.startswith( 'option' ):
 
-                if not option or not word.search( option ):
-                    break
-
-                else:
-
-                    position += 1
-                    count += 1
-                    options.append( option )
+                    if word.search( value ):
+                        count += 1
+                        options.append( value )
 
             if count < 2:
                 errors.append( 'Need 2 or more options.' )
@@ -72,10 +64,29 @@ def show_poll( request, pollId ):
         poll = Poll.objects.get( id= pollId )
 
     except Poll.DoesNotExist:
-        raise Http404
+        raise Http404( "Invalid poll id." )
+
+    errors = []
+
+    if request.method == 'POST':
+
+        optionId = request.POST.get( 'option', '' )
+
+        try:
+            selectedOption = poll.option_set.get( id= optionId )
+
+        except Option.DoesNotExist:
+            errors.append( "Selected option doesn't exist." )
+
+        else:
+            selectedOption.votes_count += 1
+            selectedOption.save()
+
+            return HttpResponseRedirect( poll.get_result_url() )
 
     context = {
-        'poll': poll
+        'poll': poll,
+        'errors': errors
     }
 
     return render( request, 'show_poll.html', context )
@@ -94,29 +105,3 @@ def results( request, pollId ):
 
     return render( request, 'results.html', context )
 
-
-def vote( request, pollId ):
-
-    try:
-        poll = Poll.objects.get( id= pollId )
-
-    except Poll.DoesNotExist:
-        raise Http404( "Invalid poll id." )
-
-
-    if request.method == 'POST':
-
-        optionId = request.POST.get( 'option', '' )
-
-        try:
-            selectedOption = poll.option_set.get( id= optionId )
-
-        except Poll.DoesNotExist:
-            return HttpResponseRedirect( poll.get_url() )   #HERE add error message
-
-        selectedOption.votes_count += 1
-        selectedOption.save()
-
-        return HttpResponseRedirect( poll.get_result_url() )
-
-    return HttpResponseRedirect( poll.get_url() )

@@ -4,7 +4,15 @@
 
 <h1>{{ poll.title }}</h1>
 
-<form method="post" action="{% url 'vote' poll.id %}">
+{% if errors %}
+<ul>
+    {% for error in errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<form method="post" action="{% url 'show_poll' poll.id %}">
     {% csrf_token %}
 
         {% for option in poll.option_set.all %}
