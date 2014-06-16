@@ -77,7 +77,7 @@ var title = form.querySelector( '#title' );
 
 if ( !pattern.test( title.value ) )
     {
-    console.log( 'Need a title' );
+    showErrorMessage( 'Need a title' );
     return false;
     }
 
@@ -94,11 +94,26 @@ for (var a = 0 ; a < options.length ; a++)
 
 if ( count < 2 )
     {
-    console.log( 'Need at least 2 options.' );
+    showErrorMessage( 'Need at least 2 options.' );
     return false;
     }
 
 return true;
+}
+
+
+function showErrorMessage( message )
+{
+var errorList = document.querySelector( '#ErrorList' );
+
+    // clear the previous messages
+errorList.innerHTML = '';
+
+var error = document.createElement( 'li' );
+
+error.innerHTML = message;
+
+errorList.appendChild( error );
 }
 
 
