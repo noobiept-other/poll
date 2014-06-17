@@ -36,7 +36,10 @@ def add_poll( request ):
 
                     if word.search( value ):
                         count += 1
-                        options.append( value )
+                        options.append({
+                            'key': key,
+                            'value':value
+                        })
 
             if count < 2:
                 errors.append( 'Need 2 or more options.' )
@@ -45,9 +48,17 @@ def add_poll( request ):
                 poll = Poll( title= title )
                 poll.save()
 
-                for optionText in options:
+                def sortById( element ):
 
-                    poll.option_set.create( text= optionText )
+                    theKey = element[ 'key' ]
+                    theId = re.match( r'\w+(?P<id>\d+)', theKey )
+                    return theId.group( 'id' )
+
+                options.sort( key= sortById )
+
+                for aOption in options:
+
+                    poll.option_set.create( text= aOption[ 'value' ] )
 
                 return HttpResponseRedirect( poll.get_url() )
 
