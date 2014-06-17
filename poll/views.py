@@ -124,8 +124,11 @@ def results( request, pollId ):
     except Poll.DoesNotExist:
         raise Http404( "Invalid poll id." )
 
+    total_votes = poll.get_total_votes()
+
     context = {
-        'poll': poll
+        'poll': poll,
+        'total_votes': total_votes
     }
 
     return render( request, 'results.html', context )

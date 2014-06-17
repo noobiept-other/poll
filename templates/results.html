@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load poll_tags %}
+
+{% block scripts %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'results.js' %}"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -13,14 +19,18 @@
     <tr>
         <th>Option</th>
         <th>Votes count</th>
+        <th>Percentage</th>
     </tr>
 
     {% for option in poll.option_set.all %}
         <tr>
             <td>{{ option.text }}</td>
-            <td>{{ option.votes_count }}</td>
+            <td class="votesCount" data-votes="{{ option.votes_count }}">{{ option.votes_count }}</td>
+            <td>{{ option.votes_count|percentage:total_votes }}</td>
         </tr>
     {% endfor %}
 </table>
+
+<canvas id="Canvas"></canvas>
 
 {% endblock %}

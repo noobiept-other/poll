@@ -16,10 +16,22 @@
     {% csrf_token %}
 
         {% for option in poll.option_set.all %}
+
+
                 {% if poll.is_single_choice %}
-                    <input type="radio" name="options" id="option_{{ forloop.counter }}" value="{{ option.id }}" />
+                    <input type="radio"
+                           name="options"
+                           id="option_{{ forloop.counter }}"
+                           value="{{ option.id }}"
+                        {% if forloop.first %}
+                            checked
+                        {% endif %}
+                            />
                 {% else %}
-                    <input type="checkbox" name="options" id="option_{{ forloop.counter }}" value="{{ option.id }}" />
+                    <input type="checkbox"
+                           name="options"
+                           id="option_{{ forloop.counter }}"
+                           value="{{ option.id }}" />
                 {% endif %}
 
                 <label for="option_{{ forloop.counter }}">{{ option.text }}</label>
