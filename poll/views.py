@@ -27,6 +27,13 @@ def add_poll( request ):
             errors.append( 'Need to add a title.' )
 
         else:
+            single_choice_str = request.POST.get( 'is_single_choice', '' )
+            is_single_choice = True
+
+            if not single_choice_str:
+                is_single_choice = False
+
+
             count = 0
             options = []
 
@@ -45,7 +52,7 @@ def add_poll( request ):
                 errors.append( 'Need 2 or more options.' )
 
             else:
-                poll = Poll( title= title )
+                poll = Poll( title= title, is_single_choice= is_single_choice )
                 poll.save()
 
                 def sortById( element ):
@@ -81,17 +88,24 @@ def show_poll( request, pollId ):
 
     if request.method == 'POST':
 
-        optionId = request.POST.get( 'option', '' )
-
         try:
-            selectedOption = poll.option_set.get( id= optionId )
+            optionsId = request.POST.getlist( 'options' )
 
-        except Option.DoesNotExist:
-            errors.append( "Selected option doesn't exist." )
+        except KeyError:
+            errors.append( "Need to send the options." )
 
         else:
-            selectedOption.votes_count += 1
-            selectedOption.save()
+            for option in optionsId:
+
+                try:
+                    selectedOption = poll.option_set.get( id= option )
+
+                except Option.DoesNotExist:
+                    pass    # just ignore
+
+                else:
+                    selectedOption.votes_count += 1
+                    selectedOption.save()
 
             return HttpResponseRedirect( poll.get_result_url() )
 

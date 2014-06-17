@@ -16,3 +16,10 @@ class PollAdmin( admin.ModelAdmin ):
 
 admin.site.register( Poll, PollAdmin )
 
+
+class OptionAdmin( admin.ModelAdmin ):
+
+    list_display = ( 'id', 'poll', 'text', 'votes_count' )
+
+admin.site.register( Option, OptionAdmin )
+

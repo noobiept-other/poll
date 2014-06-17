@@ -33,8 +33,14 @@
             <td><input type="text" name="option{{ position }}" class= "options" placeholder="option" /></td>
         </tr>
     {% endfor %}
+
+
     </table>
 
+    <p>
+        <label for="is_single_choice">Single choice</label>
+        <input type="checkbox" name="is_single_choice" id="is_single_choice" />
+    </p>
     <input type="submit" value="add" />
 </form>
 

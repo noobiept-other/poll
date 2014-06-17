@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block content %}
 
@@ -9,12 +10,14 @@
         <tr>
             <th>title</th>
             <th>total votes</th>
+            <th>date created</th>
         </tr>
 
     {% for poll in polls %}
         <tr>
             <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
             <td>{{ poll.get_total_votes }}</td>
+            <td>{{ poll.date_created|naturaltime }}</td>
         </tr>
     {% endfor %}
     </table>

@@ -26,6 +26,9 @@ class Poll( models.Model ):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        ordering = [ '-date_created' ]
+
 
 class Option( models.Model ):
     poll = models.ForeignKey( Poll )
