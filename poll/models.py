@@ -25,6 +25,16 @@ class Poll( models.Model ):
     def get_result_url(self):
         return reverse( 'results', args= [ self.id ] )
 
+    def has_voted(self, user):
+        try:
+            self.vote_set.get( voter= user )
+
+        except Vote.DoesNotExist:
+            return False
+
+        else:
+            return True
+
     def __unicode__(self):
         return self.title
 
@@ -39,3 +49,8 @@ class Option( models.Model ):
 
     def __unicode__(self):
         return self.text
+
+
+class Vote( models.Model ):
+    poll = models.ForeignKey( Poll )
+    voter = models.ForeignKey( User, related_name= 'voter' )

@@ -11,6 +11,10 @@
 
 <h2>{{ poll.title }}</h2>
 
+{% if has_voted %}
+    <p>Already voted.</p>
+{% endif %}
+
 <p>
     {{ poll.date_created }} | ({{ poll.date_created|naturaltime }})
 </p>

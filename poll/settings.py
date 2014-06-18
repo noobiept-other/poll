@@ -110,6 +110,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'poll.urls'
 
+LOGIN_REDIRECT_URL = '/'
+
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'poll.wsgi.application'
 

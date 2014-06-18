@@ -38,8 +38,12 @@
                 <br />
         {% endfor %}
 
-    <input type="submit" value="vote" />
-    <input type="hidden" name="next" value="{{ next }}" />
+    {% if has_voted %}
+        <p>Already voted.</p>
+    {% else %}
+        <input type="submit" value="vote" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}
 </form>
 
 <a href="{{ poll.get_result_url }}">Results</a>

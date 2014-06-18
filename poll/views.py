@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 import re
 
-from poll.models import Poll, Option
+from poll.models import Poll, Option, Vote
 
 def home( request ):
 
@@ -91,33 +91,46 @@ def show_poll( request, pollId ):
         raise Http404( "Invalid poll id." )
 
     errors = []
+    has_voted = False
 
-    if request.method == 'POST':
+    try:
+        Vote.objects.get( poll= poll, voter= request.user )
 
-        try:
-            optionsId = request.POST.getlist( 'options' )
+    except Vote.DoesNotExist:
 
-        except KeyError:
-            errors.append( "Need to send the options." )
+        if request.method == 'POST':
+            try:
+                optionsId = request.POST.getlist( 'options' )
 
-        else:
-            for option in optionsId:
+            except KeyError:
+                errors.append( "Need to send the options." )
 
-                try:
-                    selectedOption = poll.option_set.get( id= option )
+            else:
+                vote = Vote( poll= poll, voter= request.user )
+                vote.save()
 
-                except Option.DoesNotExist:
-                    pass    # just ignore
+                for option in optionsId:
 
-                else:
-                    selectedOption.votes_count += 1
-                    selectedOption.save()
+                    try:
+                        selectedOption = poll.option_set.get( id= option )
 
-            return HttpResponseRedirect( poll.get_result_url() )
+                    except Option.DoesNotExist:
+                        pass    # just ignore
+
+                    else:
+                        selectedOption.votes_count += 1
+                        selectedOption.save()
+
+
+                return HttpResponseRedirect( poll.get_result_url() )
+
+    else:
+        has_voted = True
 
     context = {
         'poll': poll,
-        'errors': errors
+        'errors': errors,
+        'has_voted': has_voted
     }
 
     return render( request, 'show_poll.html', context )
@@ -131,10 +144,15 @@ def results( request, pollId ):
         raise Http404( "Invalid poll id." )
 
     total_votes = poll.get_total_votes()
+    has_voted = False
+
+    if request.user.is_authenticated():
+        has_voted = poll.has_voted( request.user )
 
     context = {
         'poll': poll,
-        'total_votes': total_votes
+        'total_votes': total_votes,
+        'has_voted': has_voted
     }
 
     return render( request, 'results.html', context )
