@@ -75,6 +75,10 @@ for (var a = 0 ; a < votes.length ; a++)
     ctx.closePath();
     ctx.fill();
 
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'white';
+    ctx.stroke();
+
     startAngle = endAngle;
     }
 }
