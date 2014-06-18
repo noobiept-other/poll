@@ -18,6 +18,7 @@
             <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
             <td>{{ poll.get_total_votes }}</td>
             <td>{{ poll.date_created|naturaltime }}</td>
+            <td><a href="{{ poll.get_result_url }}">results</a></td>
         </tr>
     {% endfor %}
     </table>

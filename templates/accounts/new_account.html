@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if form.errors %}
+        <ul>
+            {% for field in form %}
+                <li>{{ field.errors }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+<form method="post" action="{% url 'new_account' %}">
+    {% csrf_token %}
+
+    <table>
+        <tr>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password1.label_tag }}</td>
+            <td>{{ form.password1 }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.password2.label_tag }}</td>
+            <td>{{ form.password2 }}</td>
+        </tr>
+    </table>
+
+    <input type="submit" value="create" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

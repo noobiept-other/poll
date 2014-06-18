@@ -1,5 +1,9 @@
 from django.shortcuts import render
 from django.http import Http404, HttpResponseRedirect
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
 import re
 
@@ -14,6 +18,7 @@ def home( request ):
     return render( request, 'home.html', context )
 
 
+@login_required( login_url= 'login' )
 def add_poll( request ):
 
     errors = []
@@ -52,7 +57,7 @@ def add_poll( request ):
                 errors.append( 'Need 2 or more options.' )
 
             else:
-                poll = Poll( title= title, is_single_choice= is_single_choice )
+                poll = Poll( user= request.user, title= title, is_single_choice= is_single_choice )
                 poll.save()
 
                 def sortById( element ):
@@ -76,6 +81,7 @@ def add_poll( request ):
 
     return render( request, 'add_poll.html', context )
 
+@login_required( login_url= 'login' )
 def show_poll( request, pollId ):
 
     try:
@@ -133,3 +139,42 @@ def results( request, pollId ):
 
     return render( request, 'results.html', context )
 
+
+def new_account( request ):
+
+    if request.method == 'POST':
+        form = UserCreationForm( request.POST )
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect( reverse( 'login' ) )
+
+    else:
+        form = UserCreationForm()
+
+    context = {
+        'form': form
+    }
+
+    return render( request, 'accounts/new_account.html', context )
+
+
+def user_page( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "User doesn't exist." )
+
+    polls = user.poll_set.order_by( '-date_created' )
+
+    context = {
+        'pageUser': user,
+        'poll_count': polls.count(),
+        'last_polls': polls[ :5 ]
+    }
+
+    return render( request, 'accounts/user_age.html', context )

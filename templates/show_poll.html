@@ -17,7 +17,6 @@
 
         {% for option in poll.option_set.all %}
 
-
                 {% if poll.is_single_choice %}
                     <input type="radio"
                            name="options"
@@ -40,6 +39,7 @@
         {% endfor %}
 
     <input type="submit" value="vote" />
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 <a href="{{ poll.get_result_url }}">Results</a>
