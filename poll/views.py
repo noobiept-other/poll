@@ -11,8 +11,29 @@ from poll.models import Poll, Option, Vote
 
 def home( request ):
 
+    title = 'All polls'
+
+    if request.user.is_authenticated():
+
+        filterPolls = request.GET.get( 'filter', '' )
+
+        if filterPolls == 'already_voted':
+            polls = Poll.objects.filter( vote__voter= request.user )
+            title = 'Already voted polls'
+
+        elif filterPolls == 'not_voted':
+            polls = Poll.objects.exclude( vote__voter= request.user )
+            title = 'Not voted polls'
+
+        else:
+            polls = Poll.objects.all()
+
+    else:
+        polls = Poll.objects.all()
+
     context = {
-        'polls': Poll.objects.all()
+        'polls': polls,
+        'title': title
     }
 
     return render( request, 'home.html', context )

@@ -3,7 +3,16 @@
 
 {% block content %}
 
-<h2>Available polls</h2>
+{% if user.is_authenticated %}
+<p>
+    <a href="{% url 'home' %}">all</a>
+    <a href="{% url 'home' %}?filter=already_voted">voted</a>
+    <a href="{% url 'home' %}?filter=not_voted">not voted</a>
+</p>
+
+{% endif %}
+
+<h2>{{ title }}</h2>
 
 {% if polls %}
     <table>
