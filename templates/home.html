@@ -1,24 +1,25 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load accounts %}
 
 {% block content %}
 
-{% if user.is_authenticated %}
-<p>
-    <a href="{% url 'home' %}">all</a>
-    <a href="{% url 'home' %}?filter=already_voted">voted</a>
-    <a href="{% url 'home' %}?filter=not_voted">not voted</a>
-</p>
+<h2 id="PollTitle">
+    {{ title }}
 
-{% endif %}
-
-<h2>{{ title }}</h2>
+    {% if user.is_authenticated %}
+        <a href="{% url 'home' %}" {% if all_selected %}class="selected"{% endif %}>all</a>
+        <a href="{% url 'home' %}?filter=already_voted" {% if voted_selected %}class="selected"{% endif %}>voted</a>
+        <a href="{% url 'home' %}?filter=not_voted" {% if not_voted_selected %}class="selected"{% endif %}>not voted</a>
+    {% endif %}
+</h2>
 
 {% if polls %}
-    <table>
+    <table id="PollTable">
         <tr>
             <th>title</th>
             <th>total votes</th>
+            <th>created by</th>
             <th>date created</th>
         </tr>
 
@@ -26,6 +27,7 @@
         <tr>
             <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
             <td>{{ poll.get_total_votes }}</td>
+            <td>{{ poll.user|account_name }}</td>
             <td>{{ poll.date_created|naturaltime }}</td>
             <td><a href="{{ poll.get_result_url }}">results</a></td>
         </tr>

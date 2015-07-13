@@ -15,35 +15,31 @@
 <form method="post" action="{% url 'show_poll' poll.id %}">
     {% csrf_token %}
 
-        {% for option in poll.option_set.all %}
+    {% for option in poll.option_set.all %}
 
-                {% if poll.is_single_choice %}
-                    <input type="radio"
-                           name="options"
-                           id="option_{{ forloop.counter }}"
-                           value="{{ option.id }}"
-                        {% if forloop.first %}
-                            checked
-                        {% endif %}
-                            />
-                {% else %}
-                    <input type="checkbox"
-                           name="options"
-                           id="option_{{ forloop.counter }}"
-                           value="{{ option.id }}" />
+        {% if poll.is_single_choice %}
+            <input type="radio"
+                   name="options"
+                   id="option_{{ forloop.counter }}"
+                   value="{{ option.id }}"
+                {% if forloop.first %}
+                    checked
                 {% endif %}
+                    />
+        {% else %}
+            <input type="checkbox"
+                   name="options"
+                   id="option_{{ forloop.counter }}"
+                   value="{{ option.id }}" />
+        {% endif %}
 
-                <label for="option_{{ forloop.counter }}">{{ option.text }}</label>
+        <label for="option_{{ forloop.counter }}">{{ option.text }}</label>
 
-                <br />
-        {% endfor %}
+        <br />
+    {% endfor %}
 
-    {% if has_voted %}
-        <p>Already voted.</p>
-    {% else %}
-        <input type="submit" value="vote" />
-        <input type="hidden" name="next" value="{{ next }}" />
-    {% endif %}
+    <input type="submit" value="vote" />
+    <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
 <a href="{{ poll.get_result_url }}">Results</a>

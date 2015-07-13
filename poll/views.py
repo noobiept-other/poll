@@ -12,6 +12,7 @@ from poll.models import Poll, Option, Vote
 def home( request ):
 
     title = 'All polls'
+    selected = 'all_selected'
 
     if request.user.is_authenticated():
 
@@ -20,10 +21,12 @@ def home( request ):
         if filterPolls == 'already_voted':
             polls = Poll.objects.filter( vote__voter= request.user )
             title = 'Already voted polls'
+            selected = 'voted_selected'
 
         elif filterPolls == 'not_voted':
             polls = Poll.objects.exclude( vote__voter= request.user )
             title = 'Not voted polls'
+            selected = 'not_voted_selected'
 
         else:
             polls = Poll.objects.all()
@@ -32,8 +35,9 @@ def home( request ):
         polls = Poll.objects.all()
 
     context = {
+        'title': title,
         'polls': polls,
-        'title': title
+        selected: True
     }
 
     return render( request, 'home.html', context )
@@ -113,7 +117,6 @@ def show_poll( request, pollId ):
         raise Http404( "Invalid poll id." )
 
     errors = []
-    has_voted = False
 
     try:
         Vote.objects.get( poll= poll, voter= request.user )
@@ -146,13 +149,13 @@ def show_poll( request, pollId ):
 
                 return HttpResponseRedirect( poll.get_result_url() )
 
+        # already has voted, redirect to the results page
     else:
-        has_voted = True
+        return HttpResponseRedirect( poll.get_result_url() )
 
     context = {
         'poll': poll,
-        'errors': errors,
-        'has_voted': has_voted
+        'errors': errors
     }
 
     return render( request, 'show_poll.html', context )

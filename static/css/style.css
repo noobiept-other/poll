@@ -1,5 +1,10 @@
     /* Basic Elements */
 
+body
+    {
+    font-size: 24px;
+    }
+
 em
     {
     font-weight: bold;
@@ -76,6 +81,11 @@ em
     padding: 5px;
     }
 
+.selected
+    {
+    background-color: rgba(105, 209, 255, 0.55);
+    }
+
 
     /* Accounts/User Page */
 
@@ -101,3 +111,23 @@ em
     background-color: aliceblue;
     text-align: center;
     }
+
+
+    /* Poll */
+
+#PollTable
+    {
+    text-align: center;
+    }
+
+#PollTable th
+    {
+    background-color: rgba(165, 42, 42, 0.15);
+    padding: 1px 10px;
+    }
+
+#PollTitle a
+    {
+    padding: 0 10px;
+    }
+
