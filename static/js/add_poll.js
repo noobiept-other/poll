@@ -1,11 +1,11 @@
-var AddPoll = (function()
-{
-function A()
-{
+var AddPoll;
+(function(AddPoll) {
 
-}
 
-A.init = function ()
+/**
+ * Initialize the add poll form.
+ */
+AddPoll.init = function()
 {
 var addPoll = document.querySelector( '#AddPollForm' );
 
@@ -23,11 +23,9 @@ if ( addPoll )
 };
 
 
-
-/*
-    Checks if there's an empty input available. If there isn't a new one is added
+/**
+ * Checks if there's an empty input available. If there isn't a new one is added.
  */
-
 function addNewInput( event )
 {
 var table = document.querySelector( '#AddPollTable' );
@@ -68,6 +66,10 @@ table.appendChild( tableRow );
 }
 
 
+/**
+ * Check if the title is empty or not.
+ * Check if there's at least 2 non-empty options.
+ */
 function validateAddPollForm( event )
 {
 var form = event.target;
@@ -117,8 +119,7 @@ errorList.appendChild( error );
 }
 
 
-return A;
+})(AddPoll || (AddPoll = {}));
 
-}());
 
 window.addEventListener( 'load', AddPoll.init, false );

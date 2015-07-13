@@ -3,20 +3,21 @@ from django.http import Http404, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
 
 import re
+import math
 
 from poll.models import Poll, Option, Vote
 
 
-def home( request ):
+def home( request, pageNumber= 0 ):
 
     title = 'All polls'
     selected = 'all_selected'
+    filterPolls = request.GET.get( 'filter', '' )
 
     if request.user.is_authenticated():
-
-        filterPolls = request.GET.get( 'filter', '' )
 
         if filterPolls == 'already_voted':
             polls = Poll.objects.filter( vote__voter= request.user )
@@ -34,10 +35,25 @@ def home( request ):
     else:
         polls = Poll.objects.all()
 
+
+    pollsPerPage = settings.POLLS_PER_PAGE
+    pageNumber = int( pageNumber )
+    startPoll = pageNumber * pollsPerPage
+    pollsCount = polls.count()
+    totalPages = math.ceil( pollsCount / pollsPerPage )
+
+    if startPoll >= pollsCount:
+        raise Http404( "Invalid page." )
+
+    polls = polls[ startPoll : startPoll + pollsPerPage ]
+
     context = {
         'title': title,
         'polls': polls,
-        selected: True
+        'page': pageNumber,
+        selected: True,
+        'pages_list': range( 0, totalPages ),
+        'filter': filterPolls
     }
 
     return render( request, 'home.html', context )

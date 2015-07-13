@@ -8,6 +8,7 @@ from django.contrib import admin
 
 urlpatterns = [
     url( r'^$', 'poll.views.home', name= 'home' ),
+    url( r'^(?P<pageNumber>\d+)$', 'poll.views.home', name= 'home' ),
     url( r'^add_poll$', 'poll.views.add_poll', name= 'add_poll' ),
     url( r'^poll/(?P<pollId>\d+)$', 'poll.views.show_poll', name= 'show_poll' ),
     url( r'^poll/(?P<pollId>\d+)/results$', 'poll.views.results', name= 'results' ),

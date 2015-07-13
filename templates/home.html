@@ -15,6 +15,18 @@
 </h2>
 
 {% if polls %}
+    <ul class="horizontalList pageNumber">
+    {% for pageNumber in pages_list %}
+        <li><a href="{% url 'home' pageNumber %}?filter={{ filter }}" class="PageLink">
+            {% if pageNumber == page %}
+                <em>{{ pageNumber }}</em>
+            {% else %}
+                {{ pageNumber }}
+            {% endif %}
+        </a></li>
+    {% endfor %}
+    </ul>
+
     <table id="PollTable">
         <tr>
             <th>title</th>
@@ -33,6 +45,21 @@
         </tr>
     {% endfor %}
     </table>
+
+
+    <ul class="horizontalList pageNumber">
+    {% for pageNumber in pages_list %}
+        <li><a href="{% url 'home' pageNumber %}?filter={{ filter }}" class="PageLink">
+            {% if pageNumber == page %}
+                <em>{{ pageNumber }}</em>
+            {% else %}
+                {{ pageNumber }}
+            {% endif %}
+        </a></li>
+    {% endfor %}
+    </ul>
+
+
 {% else %}
     <p>
        No polls available.

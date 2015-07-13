@@ -1,13 +1,11 @@
-var Results = (function()
-{
-function R()
-{
+var Results;
+(function(Results) {
 
-}
 
 var CANVAS = null;
 
-R.init = function()
+
+Results.init = function()
 {
 CANVAS = document.querySelector( '#Canvas' );
 
@@ -84,8 +82,7 @@ for (var a = 0 ; a < votes.length ; a++)
 }
 
 
-return R;
+})(Results || (Results = {}));
 
-}());
 
 window.addEventListener( 'load', Results.init, false );

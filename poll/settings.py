@@ -135,3 +135,6 @@ LOGOUT_URL = 'accounts:logout'
 LOGIN_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'accounts.Account'
+
+
+POLLS_PER_PAGE = 10
