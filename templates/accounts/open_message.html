@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load accounts %}
+
+{% block content %}
+
+<p>From {{ private_message.sender|account_name }} {{ private_message.date_created|naturaltime }}</p>
+
+<h2 id="PrivateMessage-title">{{ private_message.title }}</h2>
+
+<p>{{ private_message.content|linebreaksbr }}</p>
+
+<a href="{% url 'accounts:message_send' private_message.sender %}">reply</a>
+<a href="{% url 'accounts:message_all' %}">back</a>
+
+{% endblock %}

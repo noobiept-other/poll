@@ -2,10 +2,12 @@ from django.contrib import admin
 
 from poll.models import Poll, Option
 
+
 class OptionInline( admin.TabularInline ):
 
     model = Option
     extra = 4
+
 
 class PollAdmin( admin.ModelAdmin ):
 

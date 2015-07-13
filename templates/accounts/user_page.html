@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load accounts %}
+
+{% block content %}
+
+    <h2>
+        {{ pageUser|account_name }}
+
+        <ul class="horizontalList">
+            {% if user.is_moderator or user.is_staff %}
+            <li>
+                <a href="{% url 'accounts:disable_confirm' pageUser.username %}">
+                    {% if pageUser.is_active %}
+                        disable
+                    {% else %}
+                        enable
+                    {% endif %}
+                </a>
+            </li>
+            {% endif %}
+
+            {% if user.is_staff %}
+            <li>
+                <a href="{% url 'accounts:set_moderator_confirm' pageUser.username %}">
+                    {% if pageUser.is_moderator %}
+                        un-mod
+                    {% else %}
+                        mod
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'accounts:remove_confirm' pageUser.username %}">remove</a>
+            </li>
+            {% endif %}
+        </ul>
+    </h2>
+
+    <p>User since: {{ pageUser.date_joined }} ({{ pageUser.date_joined|naturaltime }})</p>
+
+    {% if user.is_authenticated %}
+        <ul>
+        {% if user.username == pageUser.username %}
+            <li>
+                <a href="{% url 'accounts:message_all' %}">See messages
+                    {% if unreadMessages %}
+                        (<em>{{ unreadMessages }}</em> unread)
+                    {% endif %}
+                </a>
+            </li>
+            <li><a href="{% url 'accounts:change_password' %}">change password</a></li>
+        {% else %}
+            <li><a href="{% url 'accounts:message_send' pageUser.username %}">Send private message</a></li>
+        {% endif %}
+        </ul>
+    {% endif %}
+
+
+    <p>Polls created: {{ poll_count }}</p>
+
+    {% if last_polls %}
+        <p>Latest polls:</p>
+
+        <table>
+            {% for poll in last_polls %}
+            <tr>
+                <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
+                <td>{{ poll.date_created|naturaltime }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}

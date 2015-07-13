@@ -1,27 +1,35 @@
 {% load static %}
+{% load accounts %}
 
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title>Poll</title>
 
     {% block scripts %}{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
 
 <div id="Menu">
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'add_poll' %}">Add poll</a>
-
-    {% if user.is_authenticated %}
-        <a href="{% url 'user_page' user.username %}">{{ user.username }}</a>
-        <a href="{% url 'logout' %}?next={{ request.get_full_path|urlencode }}">logout</a>
-    {% else %}
-        <a href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">login</a>
-    {% endif %}
+    <ul class="horizontalList">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'add_poll' %}">Add poll</a></li>
+        <li>
+        {% if user.is_authenticated %}
+            {{ user|account_name }} ( <a href="{% url 'accounts:logout' %}?next={{ request.get_full_path|urlencode }}">logout</a> )
+        {% else %}
+            <a href="{% url 'accounts:login' %}?next={{ request.get_full_path|urlencode }}">login</a>
+        {% endif %}
+        </li>
+    </ul>
 </div>
+
+{% if MESSAGE %}
+    <p id="Message">{{ MESSAGE }}</p>
+{% endif %}
 
 {% block content %}{% endblock %}
 

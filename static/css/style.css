@@ -1,0 +1,103 @@
+    /* Basic Elements */
+
+em
+    {
+    font-weight: bold;
+    font-style: normal;
+    }
+
+
+    /* Top Menu */
+
+#Menu ul
+    {
+    display: block;
+    margin: 15px;
+    }
+
+#Message
+    {
+    background-color: rgba(201, 219, 237, 0.83);
+    }
+
+
+    /* Generic Classes */
+
+.horizontalList
+    {
+    list-style-type: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    }
+
+.horizontalList > *
+    {
+    display: inline-block;
+    }
+
+.red
+    {
+    color: red;
+    }
+
+.Accounts-disabled
+    {
+    color: gray;
+    text-decoration: underline;
+    }
+
+.Accounts-moderator
+    {
+    color: green;
+    font-weight: bold;
+    text-decoration: underline;
+    }
+
+.Accounts-staff
+    {
+    color: brown;
+    font-weight: bold;
+    text-decoration: underline;
+    }
+
+.clickableRow
+    {
+    cursor: pointer;
+    }
+
+.tooltip
+    {
+    position: absolute;
+    min-width: 100px;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 0 10px 0;
+    padding: 5px;
+    }
+
+
+    /* Accounts/User Page */
+
+#CheckMessagesTable tr:nth-child(even)
+    {
+    background-color: #e6edeb;
+    }
+
+#CheckMessagesTable td
+    {
+    padding: 5px;
+    min-width: 200px;
+    position: relative;
+    }
+
+#CheckMessagesTable td:last-child
+    {
+    min-width: 10px;
+    }
+
+#PrivateMessage-title
+    {
+    background-color: aliceblue;
+    text-align: center;
+    }

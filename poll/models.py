@@ -1,13 +1,14 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+from accounts.models import Account
+
 
 class Poll( models.Model ):
 
-    user = models.ForeignKey( User )
+    user = models.ForeignKey( Account )
     title = models.CharField( max_length= 100 )
-    date_created = models.DateTimeField( help_text= 'Date Created', default= lambda: timezone.localtime(timezone.now()) )
+    date_created = models.DateTimeField( help_text= 'Date Created', default= timezone.now )
     is_single_choice = models.BooleanField( default= True )
 
     def get_total_votes(self):
@@ -19,7 +20,6 @@ class Poll( models.Model ):
         return count
 
     def get_url(self):
-
         return reverse( 'show_poll', args= [ self.id ] )
 
     def get_result_url(self):
@@ -35,7 +35,7 @@ class Poll( models.Model ):
         else:
             return True
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
@@ -47,10 +47,10 @@ class Option( models.Model ):
     text = models.CharField( max_length= 20 )
     votes_count = models.PositiveIntegerField( default= 0 )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.text
 
 
 class Vote( models.Model ):
     poll = models.ForeignKey( Poll )
-    voter = models.ForeignKey( User, related_name= 'voter' )
+    voter = models.ForeignKey( Account, related_name= 'voter' )
