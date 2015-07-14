@@ -6,10 +6,14 @@ from django.template.defaultfilters import truncatechars
 from accounts.models import Account
 
 
+POLL_TITLE_LENGTH = 100
+OPTION_TEXT_LENGTH = 50
+
+
 class Poll( models.Model ):
 
     user = models.ForeignKey( Account )
-    title = models.CharField( max_length= 100 )
+    title = models.CharField( max_length= POLL_TITLE_LENGTH )
     date_created = models.DateTimeField( help_text= 'Date Created', default= timezone.now )
     is_single_choice = models.BooleanField( default= True )
     is_opened = models.BooleanField( default= True )
@@ -59,7 +63,7 @@ class Poll( models.Model ):
 
 class Option( models.Model ):
     poll = models.ForeignKey( Poll )
-    text = models.CharField( max_length= 20 )
+    text = models.CharField( max_length= OPTION_TEXT_LENGTH )
     votes_count = models.PositiveIntegerField( default= 0 )
 
     def __str__(self):

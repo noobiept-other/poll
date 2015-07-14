@@ -24,13 +24,13 @@
     <table id="AddPollTable">
         <tr>
             <td><label for="title">title</label></td>
-            <td><input type="text" name="title" id="title" placeholder="title" /></td>
+            <td><input type="text" name="title" id="title" placeholder="title" maxlength="{{ title_length }}" /></td>
         </tr>
 
-    {% for position in initialOptions %}
+    {% for position in initial_options %}
         <tr>
             <td><label for="option{{ position }}" class="optionsLabel">{{ position }}</label></td>
-            <td><input type="text" name="option{{ position }}" class= "options" placeholder="option" /></td>
+            <td><input type="text" name="option{{ position }}" class= "options" placeholder="option" maxlength="{{ option_length }}" /></td>
         </tr>
     {% endfor %}
 

@@ -8,7 +8,7 @@ from django.conf import settings
 import re
 import math
 
-from poll.models import Poll, Option, Vote
+from poll.models import Poll, Option, Vote, POLL_TITLE_LENGTH, OPTION_TEXT_LENGTH
 from poll import utilities
 
 
@@ -119,7 +119,9 @@ def add_poll( request ):
 
     context = {
         'errors': errors,
-        'initialOptions': range( 1, 4 )
+        'initial_options': range( 1, 4 ),
+        'title_length': POLL_TITLE_LENGTH,
+        'option_length': OPTION_TEXT_LENGTH
     }
 
     return render( request, 'add_poll.html', context )

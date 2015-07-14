@@ -13,7 +13,7 @@
 
     {% for poll in polls %}
         <tr>
-            <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
+            <td><a href="{{ poll.get_url }}">{{ poll.title|truncatechars:40 }}</a></td>
             <td>{{ poll.get_total_votes }}</td>
             <td>{{ poll.user|account_name }}</td>
             <td>{{ poll.get_highest_vote|default:"---" }}</td>
