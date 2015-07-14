@@ -116,12 +116,12 @@ em
 
     /* Poll */
 
-#PollTable
+#PollTable, #ResultsTable
     {
     text-align: center;
     }
 
-#PollTable th
+#PollTable th, #ResultsTable th
     {
     background-color: rgba(165, 42, 42, 0.15);
     padding: 1px 10px;
@@ -136,4 +136,9 @@ em
     {
     display: block;
     margin: 10px;
+    }
+
+#ResultsTable
+    {
+    float: left;
     }

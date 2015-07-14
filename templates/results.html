@@ -25,7 +25,7 @@
     {{ poll.date_created }} ({{ poll.date_created|naturaltime }})
 </p>
 
-<table>
+<table id="ResultsTable">
     <tr>
         <th>Option</th>
         <th>Votes count</th>
@@ -41,6 +41,6 @@
     {% endfor %}
 </table>
 
-<canvas id="Canvas"></canvas>
+<canvas id="Canvas" width="400" height="200"></canvas>
 
 {% endblock %}
