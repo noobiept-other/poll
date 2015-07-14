@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from poll.models import Poll, Option
+from poll.models import Poll, Option, Vote
 
 
 class OptionInline( admin.TabularInline ):
@@ -25,3 +25,9 @@ class OptionAdmin( admin.ModelAdmin ):
 
 admin.site.register( Option, OptionAdmin )
 
+
+class VoteAdmin( admin.ModelAdmin ):
+
+    list_display = ( 'poll', 'voter' )
+
+admin.site.register( Vote, VoteAdmin )

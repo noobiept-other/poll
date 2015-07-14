@@ -32,7 +32,7 @@
         <th>Percentage</th>
     </tr>
 
-    {% for option in poll.option_set.all %}
+    {% for option in options %}
         <tr>
             <td>{{ option.text }}</td>
             <td class="votesCount" data-votes="{{ option.votes_count }}">{{ option.votes_count }}</td>

@@ -279,6 +279,7 @@ def results( request, pollId ):
 
     context = {
         'poll': poll,
+        'options': poll.option_set.order_by( '-votes_count' ),
         'total_votes': total_votes,
         'has_voted': has_voted
     }
