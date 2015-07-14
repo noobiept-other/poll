@@ -9,6 +9,7 @@ import re
 import math
 
 from poll.models import Poll, Option, Vote
+from poll import utilities
 
 
 def home( request, pageNumber= 0 ):
@@ -42,7 +43,7 @@ def home( request, pageNumber= 0 ):
     pollsCount = polls.count()
     totalPages = math.ceil( pollsCount / pollsPerPage )
 
-    if startPoll >= pollsCount:
+    if startPoll > pollsCount:
         raise Http404( "Invalid page." )
 
     polls = polls[ startPoll : startPoll + pollsPerPage ]
@@ -55,6 +56,7 @@ def home( request, pageNumber= 0 ):
         'pages_list': range( 0, totalPages ),
         'filter': filterPolls
     }
+    utilities.get_message( request, context )
 
     return render( request, 'home.html', context )
 
@@ -124,13 +126,95 @@ def add_poll( request ):
 
 
 @login_required
-def show_poll( request, pollId ):
+def remove_poll_confirm( request, pollId ):
+
+    try:
+        poll = request.user.poll_set.get( id= pollId )
+
+    except Poll.DoesNotExist:
+        raise Http404( "Didn't find the poll." )
+
+    context = {
+        'poll': poll,
+        'next': request.GET.get( 'next', '/' )
+    }
+
+    return render( request, 'confirm_remove_poll.html', context )
+
+
+@login_required
+def remove_poll( request, pollId ):
+
+    try:
+        poll = request.user.poll_set.get( id= pollId )
+
+    except Poll.DoesNotExist:
+        raise Http404( "Didn't find the poll." )
+
+    utilities.set_message( request, "'{}' poll removed!".format( poll.title ) )
+    poll.delete()
+
+    nextUrl = request.GET.get( 'next', '/' )
+
+    return HttpResponseRedirect( nextUrl )
+
+
+@login_required
+def open_close_poll_confirm( request, pollId ):
+
+    try:
+        poll = request.user.poll_set.get( id= pollId )
+
+    except Poll.DoesNotExist:
+        raise Http404( "Didn't find the poll." )
+
+    context = {
+        'poll': poll,
+        'next': request.GET.get( 'next', '/' )
+    }
+
+    return render( request, 'confirm_open_close_poll.html', context )
+
+
+@login_required
+def open_close_poll( request, pollId ):
+
+    try:
+        poll = request.user.poll_set.get( id= pollId )
+
+    except Poll.DoesNotExist:
+        raise Http404( "Didn't find the poll." )
+
+    poll.is_opened = not poll.is_opened
+    poll.save( update_fields= [ 'is_opened' ] )
+
+    if poll.is_opened:
+        message = "'{}' is now opened.".format( poll.title )
+
+    else:
+        message = "'{}' is now closed.".format( poll.title )
+
+    utilities.set_message( request, message )
+
+    nextUrl = request.GET.get( 'next', '/' )
+
+    return HttpResponseRedirect( nextUrl )
+
+
+@login_required
+def vote_poll( request, pollId ):
 
     try:
         poll = Poll.objects.get( id= pollId )
 
     except Poll.DoesNotExist:
         raise Http404( "Invalid poll id." )
+
+
+    if not poll.is_opened:
+        utilities.set_message( request, 'Poll is closed!' )
+        return HttpResponseRedirect( poll.get_result_url() )
+
 
     errors = []
 
@@ -174,7 +258,7 @@ def show_poll( request, pollId ):
         'errors': errors
     }
 
-    return render( request, 'show_poll.html', context )
+    return render( request, 'vote_poll.html', context )
 
 
 def results( request, pollId ):
@@ -196,6 +280,7 @@ def results( request, pollId ):
         'total_votes': total_votes,
         'has_voted': has_voted
     }
+    utilities.get_message( request, context )
 
     return render( request, 'results.html', context )
 
@@ -214,5 +299,6 @@ def all_polls( request, username ):
         'pageUser': user,
         'polls': user.poll_set.all()
     }
+    utilities.get_message( request, context )
 
     return render( request, 'all_polls.html', context )

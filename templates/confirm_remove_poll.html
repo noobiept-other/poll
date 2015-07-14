@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load accounts %}
+
+{% block content %}
+
+<h2>Remove the poll?</h2>
+
+<p>Poll: "{{ poll.title }}" by {{ poll.user|account_name }}</p>
+
+<p>
+    <a href="{% url 'remove_poll' poll.id %}?next={{ next }}">Yes</a>
+    <a href="{{ next }}">No</a>
+</p>
+
+{% endblock %}

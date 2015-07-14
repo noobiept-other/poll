@@ -19,6 +19,16 @@
             <td>{{ poll.get_highest_vote|default:"---" }}</td>
             <td>{{ poll.date_created|naturaltime }}</td>
             <td><a href="{{ poll.get_result_url }}">results</a></td>
+            {% if poll.user == user %}
+                <td><a href="{% url 'open_close_poll_confirm' poll.id %}?next={{ request.get_full_path|urlencode }}">
+                    {% if poll.is_opened %}
+                        close
+                    {% else %}
+                        open
+                    {% endif %}
+                </a></td>
+                <td><a href="{% url 'remove_poll_confirm' poll.id %}?next={{ request.get_full_path|urlencode }}">remove</a></td>
+            {% endif %}
         </tr>
     {% endfor %}
     </table>

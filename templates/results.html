@@ -9,7 +9,13 @@
 
 {% block content %}
 
-<h2>{{ poll.title }}</h2>
+<h2>
+    {{ poll.title }}
+
+    {% if not poll.is_opened %}
+        <em>(closed)</em>
+    {% endif %}
+</h2>
 
 {% if has_voted %}
     <p>Already voted.</p>

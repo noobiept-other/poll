@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load accounts %}
+
+{% block content %}
+
+{% if poll.is_opened %}
+    <h2>Close the poll?</h2>
+{% else %}
+    <h2>Re-open the poll?</h2>
+{% endif %}
+
+<p>Poll: "{{ poll.title }}" by {{ poll.user|account_name }}</p>
+
+<p>
+    <a href="{% url 'open_close_poll' poll.id %}?next={{ next }}">Yes</a>
+    <a href="{{ next }}">No</a>
+</p>
+
+{% endblock %}

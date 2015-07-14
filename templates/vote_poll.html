@@ -12,7 +12,7 @@
 </ul>
 {% endif %}
 
-<form method="post" action="{% url 'show_poll' poll.id %}">
+<form method="post" action="{% url 'vote_poll' poll.id %}">
     {% csrf_token %}
 
     {% for option in poll.option_set.all %}

@@ -12,6 +12,7 @@ class Poll( models.Model ):
     title = models.CharField( max_length= 100 )
     date_created = models.DateTimeField( help_text= 'Date Created', default= timezone.now )
     is_single_choice = models.BooleanField( default= True )
+    is_opened = models.BooleanField( default= True )
 
     def get_total_votes(self):
         count = 0
@@ -22,7 +23,7 @@ class Poll( models.Model ):
         return count
 
     def get_url(self):
-        return reverse( 'show_poll', args= [ self.id ] )
+        return reverse( 'vote_poll', args= [ self.id ] )
 
     def get_result_url(self):
         return reverse( 'results', args= [ self.id ] )
