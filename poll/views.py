@@ -198,3 +198,21 @@ def results( request, pollId ):
     }
 
     return render( request, 'results.html', context )
+
+
+def all_polls( request, username ):
+
+    userModel = get_user_model()
+
+    try:
+        user = userModel.objects.get( username= username )
+
+    except userModel.DoesNotExist:
+        raise Http404( "Didn't find the user." )
+
+    context = {
+        'pageUser': user,
+        'polls': user.poll_set.all()
+    }
+
+    return render( request, 'all_polls.html', context )

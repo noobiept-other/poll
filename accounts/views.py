@@ -66,7 +66,7 @@ def user_page( request, username ):
         'pageUser': user,
         'unreadMessages': user.how_many_unread_messages(),
         'poll_count': polls.count(),
-        'last_polls': polls[ :5 ]
+        'polls': polls[ :5 ]
     }
 
     utilities.get_message( request, context )

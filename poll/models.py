@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import truncatechars
+
 from accounts.models import Account
 
 
@@ -34,6 +36,18 @@ class Poll( models.Model ):
 
         else:
             return True
+
+    def get_highest_vote(self):
+        option = self.option_set.latest( 'votes_count' )
+        total = self.get_total_votes()
+
+        if total != 0:
+            name = truncatechars( option.text, 20 )
+            percentage = round( option.votes_count / total * 100 )
+
+            return '{} {}%'.format( name, percentage )
+
+
 
     def __str__(self):
         return self.title

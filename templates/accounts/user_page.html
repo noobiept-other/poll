@@ -59,24 +59,15 @@
 
     <p>Polls created: {{ poll_count }}</p>
 
-    {% if last_polls %}
+    {% if polls %}
         <p>Latest polls:</p>
 
-        <table id="PollTable">
-            <tr>
-                <th>title</th>
-                <th>total votes</th>
-                <th>date created</th>
-            </tr>
-            {% for poll in last_polls %}
-            <tr>
-                <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
-                <td>{{ poll.get_total_votes }}</td>
-                <td>{{ poll.date_created|naturaltime }}</td>
-                <td><a href="{{ poll.get_result_url }}">results</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        {% include "poll_table.html" %}
     {% endif %}
+
+    <p>
+        <a href="{% url 'all_polls' pageUser.username %}">All polls</a>
+    </p>
+
 
 {% endblock %}

@@ -1,0 +1,28 @@
+{% load accounts %}
+{% load humanize %}
+
+{% if polls %}
+    <table id="PollTable">
+        <tr>
+            <th>title</th>
+            <th>total votes</th>
+            <th>created by</th>
+            <th>highest vote</th>
+            <th>date created</th>
+        </tr>
+
+    {% for poll in polls %}
+        <tr>
+            <td><a href="{{ poll.get_url }}">{{ poll.title }}</a></td>
+            <td>{{ poll.get_total_votes }}</td>
+            <td>{{ poll.user|account_name }}</td>
+            <td>{{ poll.get_highest_vote|default:"---" }}</td>
+            <td>{{ poll.date_created|naturaltime }}</td>
+            <td><a href="{{ poll.get_result_url }}">results</a></td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No polls yet.</p>
+{% endif %}
+

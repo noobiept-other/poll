@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load accounts %}
+
+{% block content %}
+
+<h2>All Polls of {{ pageUser|account_name }}</h2>
+
+{% include "poll_table.html" %}
+
+{% endblock %}
