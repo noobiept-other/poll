@@ -92,9 +92,9 @@ for (var a = 0 ; a < votes.length ; a++)
     var endAngle = startAngle + percentage * Math.PI * 2;
 
     ctx.beginPath();
+    ctx.moveTo( centerX, centerY );
     ctx.fillStyle = color;
     ctx.arc( centerX, centerY, radius, startAngle, endAngle, false );
-    ctx.lineTo( centerX, centerY );
     ctx.closePath();
     ctx.fill();
 
